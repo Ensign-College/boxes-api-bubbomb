@@ -243,7 +243,7 @@ Resources:
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: 0
-      Port: 3000
+      Port: 3001
       TargetType: ip
       IpAddressType: ipv4
 
@@ -266,12 +266,11 @@ Resources:
           Description: Allow all outbound traffic by default
           IpProtocol: "-1"
       SecurityGroupIngress:
-        # Allow traffic from services on port 3000
         - CidrIp: 0.0.0.0/0
-          Description: Allow traffic from services on port 3000
-          FromPort: 3000
+          Description: Allow traffic from services on port 3001
+          FromPort: 3001
           IpProtocol: tcp
-          ToPort: 3000
+          ToPort: 3001
       VpcId: !Ref VPC
 
   ApplicationLBSecurityGroupIngress:

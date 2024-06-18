@@ -46,19 +46,19 @@ Resources:
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 50
-      DesiredCount: 0
+      DesiredCount: 1
       TaskDefinition: !Ref "TaskDefinition"
       LoadBalancers:
         - ContainerName: "boxes-api"
-          ContainerPort: 3000
+          ContainerPort: 3001
           TargetGroupArn: !GetAtt VPC.Outputs.LB
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: HelloWorld
+      Family: boxes-api
       Cpu: 1024
-      Memory: 8192
+      Memory: 4096
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
@@ -69,12 +69,12 @@ Resources:
       ContainerDefinitions:
         - Name: boxes-api
           Cpu: 1024
-          Memory: 8192
+          Memory: 4096
           Image: !Sub
             - ${RepoUrl}:${ImageTag}
             - RepoUrl: !GetAtt ECRRepo.RepositoryUri
           PortMappings:
-            - ContainerPort: 3000
+            - ContainerPort: 3001
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -134,5 +134,5 @@ Outputs:
     Description: URL for your application
     Value: !GetAtt VPC.Outputs.PublicLBFQDN
   RepositoryUrl:
-    Description: URL of the repo
+    Description: URL of the ECR repo
     Value: !GetAtt ECRRepo.RepositoryUri
