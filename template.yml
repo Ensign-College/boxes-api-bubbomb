@@ -23,9 +23,11 @@ Resources:
     Type: AWS::Serverless::Application
     Properties:
       Location: ./elasticache.yml
-      # Parameters:
-      #   SGID: !GetAtt VPC.Outputs.SG
-      #   Subnet: !GetAtt VPC.Outputs.PrivateSubnet1
+      Parameters:
+        # SecurityGroupId: !GetAtt VPC.Outputs.SG
+        Subnet1: !GetAtt VPC.Outputs.PrivateSubnet1
+        Subnet2: !GetAtt VPC.Outputs.PrivateSubnet2
+        VPC: !GetAtt VPC.Outputs.VPCID
 
   ECRRepo:
     Type: AWS::ECR::Repository
@@ -54,7 +56,7 @@ Resources:
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 50
-      DesiredCount: 0
+      DesiredCount: 1
       TaskDefinition: !Ref "TaskDefinition"
       LoadBalancers:
         - ContainerName: "boxes-api"
@@ -95,7 +97,7 @@ Resources:
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: /fargatelogs
+      LogGroupName: !Sub /fargatelogs-${AWS::StackName}
 
   ECSTaskExecutionRole:
     Type: AWS::IAM::Role
