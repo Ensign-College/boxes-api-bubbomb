@@ -24,7 +24,6 @@ Resources:
     Properties:
       Location: ./elasticache.yml
       Parameters:
-        # SecurityGroupId: !GetAtt VPC.Outputs.SG
         Subnet1: !GetAtt VPC.Outputs.PrivateSubnet1
         Subnet2: !GetAtt VPC.Outputs.PrivateSubnet2
         VPC: !GetAtt VPC.Outputs.VPCID
@@ -93,6 +92,9 @@ Resources:
               awslogs-group: !Ref LogGroup
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: containerlog
+          Environment:
+            - Name: REDIS_URL
+              Value: !GetAtt Elasticache.Outputs.EndpointAddress
   
   LogGroup:
     Type: AWS::Logs::LogGroup
@@ -146,6 +148,6 @@ Outputs:
   RepositoryUrl:
     Description: URL of the ECR repo
     Value: !GetAtt ECRRepo.RepositoryUri
-  # RedisUrl:
-  #   Description: URL of the Elasticache Cluster
-  #   Value: !GetAtt Elasticache.Outputs.REDIS_HOST
+  RedisUrl:
+    Description: URL of the Elasticache Redis Cluster
+    Value: !GetAtt Elasticache.Outputs.EndpointAddress

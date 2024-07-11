@@ -34,7 +34,7 @@ Resources:
           ToPort: 6379
           CidrIp: 0.0.0.0/0
 
-  Redis:
+  Elasticache:
     Type: 'AWS::ElastiCache::CacheCluster'
     Properties:
       CacheNodeType: cache.t2.micro
@@ -45,6 +45,6 @@ Resources:
         - !GetAtt MySecurityGroup.GroupId
       CacheSubnetGroupName: !Ref MyElasticacheSubnetGroup
 
-# Outputs:
-#   REDIS_HOST:
-#     Value: Redis.RedisEndpointAddress
+Outputs:
+  EndpointAddress:
+    Value: !GetAtt Elasticache.RedisEndpoint.Address
