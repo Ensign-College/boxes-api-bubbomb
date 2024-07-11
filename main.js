@@ -4,11 +4,10 @@ import redis from 'redis'
 
 const app = express()
 
-const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
-const REDIS_PORT = process.env.REDIS_PORT || 6379;
+const REDIS_URL = process.env.REDIS_URL || 'localhost:6379'
 
 const redisClient = redis.createClient({
-  url: `redis://${REDIS_HOST}:${REDIS_PORT}`
+  url: REDIS_URL
 });
 redisClient.connect()
 
